@@ -1,0 +1,33 @@
+# Исключаем конфиденциальные данные
+keys.json
+
+# Исключаем системные папки и виртуальное окружение
+ssl/
+share/
+man/
+lib/
+include/
+etc/
+conda-meta/
+bin/
+__pycache__/
+
+# Исключаем все из project_with_rasa, кроме указанных
+project_with_rasa/*
+!project_with_rasa/data/
+!project_with_rasa/config.yml
+
+# Кэш Python
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.cache/
+.pytest_cache/
+
+# Другие стандартные исключения
+.DS_Store
+.idea/
+.vscode/
+*.log
