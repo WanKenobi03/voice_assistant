@@ -22,7 +22,7 @@ class Synthesizer:
         try:
             # Проверяем, создан ли файл
             if not os.path.exists(file_path):
-                print("Ошибка: аудиофайл не создан")
+                
                 return
                 # Загружаем и воспроизводим аудио
 

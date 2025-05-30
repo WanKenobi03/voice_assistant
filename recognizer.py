@@ -34,7 +34,7 @@ class Recognizer:
       # Настройки записи
       
       recorded_frames = []
-      print('Говорите...')
+      
 
       with sd.InputStream(samplerate=self.SAMPLERATE, channels=self.CHANNELS, callback=self.audio_callback):
          non_silence_detected = False
@@ -51,11 +51,10 @@ class Recognizer:
                 non_silence_duration += len(data) / self.SAMPLERATE
             else:
                 if time.time() - silence_start_time > self.SILENCE_DURATION:
-                    print('Запись остановлена.')
+                    
                     break
       
       if not non_silence_detected or non_silence_duration < self.MIN_SPEECH_DURATION:
-         print('Речь не обнаружена или слишком короткая запись. Пожалуйста, повторите.')
          return ""  # Возвращаем пустую строку, чтобы показать, что речь не была обнаружена
       
       # Конкатенация всех записанных фреймов

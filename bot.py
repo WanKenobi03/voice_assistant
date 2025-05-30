@@ -16,7 +16,7 @@ async def main():
     api_yandex = keys['api_yandex']
 
 
-    model_path = '/Users/oadanilin/local/VA_RASA/project_with_rasa/models/nlu-20250510-182656-ferocious-teaser.tar.gz'
+    model_path = '/Users/oadanilin/local/VA_RASA/project_with_rasa/models/nlu-20250530-214024-blaring-stack.tar.gz'
     json_path = 'knowledge_base.json'
     prompt_path = 'prompt.txt'
 
@@ -33,11 +33,11 @@ async def main():
     CHANNELS = 1
 
     try:
-        print("Голосовой ассистент запущен.")
+        # print("Голосовой ассистент запущен.")
         
         # Приветственное сообщение
         welcome_message = "Привет! Я голосовой ассистент Банка Икс. Чем могу помочь?"
-        print(f"Ассистент: {welcome_message}")
+        # print(f"Ассистент: {welcome_message}")
         synth_model.synthesize(welcome_message)
         
         # Первое сообщение ассистента в истории
@@ -47,7 +47,7 @@ async def main():
         while True:
             if need_to_listen:
                 user_msg = rec_model.listen()
-                print(f"Вы сказали: {user_msg}")
+                # print(f"Вы сказали: {user_msg}")
             else:
                 need_to_listen = True
 
@@ -56,7 +56,7 @@ async def main():
                 if not turn_off:
                     turn_off = True
                     goodbye_message = "Подскажите, вы еще со мной?."
-                    print(f"Ассистент: {goodbye_message}")
+                    # print(f"Ассистент: {goodbye_message}")
                     synth_model.check()
                     continue
                 else: 
@@ -79,21 +79,21 @@ async def main():
             # Получение ответа от модели с системным промптом
             answer_from_ai = lang_model.get_answer(user_msg + add)
 
-            print(f"Ассистент: {answer_from_ai}")
+            # print(f"Ассистент: {answer_from_ai}")
             # Синтез и воспроизведение ответа
             synth_model.synthesize(answer_from_ai)
 
             
             while add:
                 user_msg = rec_model.listen()
-                print(f"Вы сказали: {user_msg}")
+                # print(f"Вы сказали: {user_msg}")
 
                 # Проверка на команду выхода
                 if user_msg.lower() in [""]:
                     if not turn_off:
                         turn_off = True
                         goodbye_message = "Подскажите, вы еще со мной?."
-                        print(f"Ассистент: {goodbye_message}")
+                        # print(f"Ассистент: {goodbye_message}")
                         synth_model.check()
                         continue
                     else:
@@ -102,15 +102,20 @@ async def main():
                 turn_off = False
                 
                 answer_from_ai = lang_model.get_answer(user_msg)
-
+                print(answer_from_ai)
                 if answer_from_ai in {'END', 'CHANGE', 'OPERATOR'}:
                     if answer_from_ai == 'CHANGE':
                         need_to_listen = False
                         synth_model.to_operator()
+                    elif answer_from_ai == 'END':
+                        synth_model.goodbye()
+                        evaluation = lang_model.evaluate()
+                        synth_model.synthesize(evaluation)
+                        return
                     break
                 # Получение ответа от модели с системным промптом
             
-                print(f"Ассистент: {answer_from_ai}")
+                # print(f"Ассистент: {answer_from_ai}")
 
                 # Синтез и воспроизведение ответа
                 synth_model.synthesize(answer_from_ai)
@@ -118,25 +123,28 @@ async def main():
 
             if answer_from_ai == 'END':
                 synth_model.goodbye()
+                evaluation = lang_model.evaluate()
+                synth_model.synthesize(evaluation)
                 break
             elif answer_from_ai == 'OPERATOR':
                 synth_model.to_operator()
+                evaluation = lang_model.evaluate()
+                synth_model.synthesize(evaluation)
                 break
             elif answer_from_ai == "OUT":
+                evaluation = lang_model.evaluate()
+                synth_model.synthesize(evaluation)
                 break
         
-
-        evaluation = lang_model.evaluate()
-
-        synth_model.synthesize(evaluation)
+        
 
     
     except KeyboardInterrupt:
-        print("\nПрограмма прервана пользователем.")
+        # print("\nПрограмма прервана пользователем.")
         
         # Прощальное сообщение при прерывании
         goodbye_message = "Окей, закрываюсь. Пока!"
-        print(f"Ассистент: {goodbye_message}")
+        # print(f"Ассистент: {goodbye_message}")
         synth_model.synthesize(goodbye_message)
     
     

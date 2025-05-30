@@ -60,6 +60,6 @@ class LanguageModel:
 
     def evaluate(self):
 
-        messages_with_system = [self.create_msg("system", 'Проанализируй весь диалог и предположи и оцени какую бы оценку диалога выдал клиента, 5 - очень хорошо, 1 - очень плохо')] + self.history
+        messages_with_system = [self.create_msg("system", self.SYSTEM_PROMPT)] + [self.create_msg("user", 'MARK: Разговор с клиентом окончен, проанализируй весь состоявшийся диалог и предположи и оцени какую бы оценку диалога поставил бы клиент, 5 - очень хорошо, 1 - очень плохо')] + self.history
         answer = self.mini_chat(messages=messages_with_system)
         return answer

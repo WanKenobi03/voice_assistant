@@ -43,7 +43,7 @@ class IntentClassifier:
         if intent not in self.knowledge_base:
             return ""
         
-        return "ADD: " + self.knowledge_base[intent]
+        return "SYSTEM_ADD: " + self.knowledge_base[intent]
     
 
 
